@@ -103,6 +103,26 @@ public class Coord2D {
 	}
 	
 	/**
+	 * Returns the maximum axis values of both coordinates
+	 * 
+	 * @param coord The other coordinate
+	 * @return The coordinate max(x, coord.x), max(y, coord.y) 
+	 */
+	public Coord2D max( final Coord2D coord ) {
+		return new Coord2D( Math.max( x, coord.x ), Math.max( y, coord.y ) );
+	}
+	
+	/**
+	 * Returns the minimum axis values of both coordinates
+	 * 
+	 * @param coord The other coordinate
+	 * @return The coordinate min(x, coord.x), min(y, coord.y) 
+	 */
+	public Coord2D min( final Coord2D coord ) {
+		return new Coord2D( Math.min( x, coord.x ), Math.min( y, coord.y ) );
+	}
+	
+	/**
 	 * Computes Manhattan distance to other coordinate
 	 * 
 	 * @param coord The other coordinate

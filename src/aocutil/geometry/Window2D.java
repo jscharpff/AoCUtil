@@ -12,15 +12,21 @@ public class Window2D implements Iterable<Coord2D> {
 	/** The window minimal and maximal coordinates */
 	protected Coord2D minCoord, maxCoord;
 	
+	/** True iff the window is of fixed-size, i.e. it does not scale to encompass new coordinates */
+	protected final boolean fixedsize;
+	
 	/**
 	 * Constructs a new empty window
 	 */
 	public Window2D( ) {
 		clear( );
+		fixedsize = false;
 	}
 	
 	/**
-	 * Constructs a new window from the given min and max x and y values
+	 * Constructs a new window from the given min and max x and y values. This
+	 * will create a window of fixed size, i.e. it will not resize to include
+	 * coordinates if requested
 	 * 
 	 * @param xmin
 	 * @param ymin
@@ -30,10 +36,12 @@ public class Window2D implements Iterable<Coord2D> {
 	public Window2D( final int xmin, final int ymin, final int xmax, final int ymax ) {
 		minCoord = new Coord2D( xmin, ymin );
 		maxCoord = new Coord2D( xmax, ymax );
+		
+		fixedsize = true;
 	}
 	
 	/**
-	 * Constructs a new window that spans the given coordinates
+	 * Constructs a new fixed window that spans the given coordinates
 	 * 
 	 * @param c1 
 	 * @param c2 
@@ -43,6 +51,11 @@ public class Window2D implements Iterable<Coord2D> {
 				Math.max( c1.x, c2.x ), Math.max( c1.y, c2.y ) );
 	}
 	
+	/** @return True if the window is fixed */
+	public boolean isFixed( ) {
+		return fixedsize;
+	}
+	
 	/**
 	 * Checks whether the window includes the coordinate, if not it is resized
 	 * to include it
@@ -50,6 +63,8 @@ public class Window2D implements Iterable<Coord2D> {
 	 * @param coord The coordinate to include
 	 */
 	public void include( final Coord2D coord ) {
+		if( fixedsize ) return;
+		
 		// first coordinate of the window?
 		if( empty() ) {
 			minCoord = coord;
@@ -68,6 +83,8 @@ public class Window2D implements Iterable<Coord2D> {
 	 * @param coords The coordinates to fit in
 	 */
 	public void resize( final Collection<Coord2D> coords ) {
+		if( fixedsize ) return;
+		
 		// resize to empty coordinate set means clearing the window
 		if( coords.size( ) == 0 ) {
 			clear( );
@@ -129,6 +146,11 @@ public class Window2D implements Iterable<Coord2D> {
 		return minCoord == null;
 	}
 
+	/** @return The number of coordinates contained in this window */
+	public long count( ) {
+		return size( ).x * size( ).y;
+	}
+	
 	/**
 	 * @return The size of the window per axis
 	 */

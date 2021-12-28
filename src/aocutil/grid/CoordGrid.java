@@ -55,15 +55,49 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	}
 	
 	/**
+	 * Fixes the window of this coordinate grid
+	 * 
+	 * @param topleft The top left coordinate of the window
+	 * @param bottomright The bottom right coordinate of the window
+	 */
+	public void fixWindow( final Coord2D toploeft, final Coord2D bottomright ) {
+		window = new Window2D( toploeft, bottomright );
+	}
+	
+	/**
+	 * Unfixes the window of this coordinate grid, resulting in it again scaling
+	 * dynamically with input. 
+	 */
+	public void unfixWindow( ) {
+		// set a new dynamic window and let it recalculate its size
+		window = new Window2D( );
+		window.resize( getKeys() );
+	}
+	
+	/**
 	 * Adds a new value to the coordinate grid at the specified coordinate
 	 * 
 	 * @param coord The coordinate to set the value for
 	 * @param value The value to set
 	 * @return The previous value that was set, null if it was not set before
 	 */
-	public T add( final Coord2D coord, final T value ) {
+	public T set( final Coord2D coord, final T value ) {
+		if( value == null ) throw new RuntimeException( "NULL" );
 		window.include( coord );
 		return map.put( coord, value );
+	}
+	
+	/**
+	 * Adds a new value at the specified x and y position. Convenient shorthand
+	 * for <code>set( new Coord2D( x, y ) )</code>
+	 * 
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @param value The value to set at (x,y)
+	 * @return The previous value that was set, null if it was not set before
+	 */
+	public T set( final int x, final int y, final T value ) {
+		return set( new Coord2D( x, y ), value );
 	}
 	
 	/**
@@ -132,6 +166,43 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		
 		window.resize( getKeys( ) );
 	}
+	
+	/**
+	 * Retrieves the current value at the coordinate and updates the value using
+	 * the specified function
+	 * 
+	 * @param coord The coordinate to update
+	 * @param updatefunc The function to update the value
+	 * @return The previous value stored at the cooridnate
+	 */
+	public T update( final Coord2D coord, final Function<T, T> updatefunc ) {
+		return set( coord, updatefunc.apply( get( coord ) ) );
+	}
+	
+	/**
+	 * Counts the number of coordinates that hold the specified value. If the
+	 * value equals the default value, this function will additionally count the
+	 * coordinates within the grid bounds that are not in the map.
+	 * <br><br>
+	 * <b>Note: </b> this function uses the equals function to test whether an
+	 * element should be counted.
+	 * 
+	 * @param value The value to count
+	 * @return The number of coordinates that have this value
+	 */
+	public long count( final T value ) {
+		if( value == null ) throw new NullPointerException( "Value to count cannot be null" ); 
+		long count = 0;
+		
+		// count the occurrence in the keys stored in this map
+		for( final T v : getValues( ) )
+			if( value.equals( v ) ) count++;
+		
+		// include coordinates within the grid window that have the default value?
+		if( value.equals( defaultValue ) ) count += window.count( ) - map.size( );
+		
+		return count;
+	}
 
 	/**
 	 * @return The collection of coordinates that have a set value in the grid
@@ -188,6 +259,10 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	}
 	
 	/**
+	 * Forcibly sets the window size. Note: this may result in 
+	 */
+	
+	/**
 	 * Creates an Iterator that goes over all coordinates in the grid, including
 	 * those without a value
 	 * 
@@ -227,7 +302,7 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 			int x = -1;
 			for( final String col : row.split( sep ) ) {
 				x++;
-				grid.add( new Coord2D( x, y ), mapfunc.apply( col ) );
+				grid.set( new Coord2D( x, y ), mapfunc.apply( col ) );
 			}
 		}
 
@@ -282,5 +357,38 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		
 		// return result minus the last newline
 		return res;
+	}
+	
+	/**
+	 * Copies the CoordGrid and all the values it contains. Produces a deep copy
+	 * of all coordinates
+	 * 
+	 * @return The copy of the grid
+	 */
+	public CoordGrid<T> copy( ) {
+		// simply "extract" the entire grid 
+		return extract( window.getMinCoord( ), window.getMaxCoord( ) );
+	}
+	
+	/**
+	 * Extracts the specified region from the CoordGrid and returns it as a new
+	 * grid. Note that the coordinates are both inclusive
+	 * 
+	 * @param topleft The top left coordinate of the area to extract
+	 * @param bottomright The bottom right coordinate
+	 * @return The area from top left to bottom right as a new grid
+	 */
+	public CoordGrid<T> extract( final Coord2D topleft, final Coord2D bottomright ) {
+		final CoordGrid<T> ex = new CoordGrid<>( defaultValue );
+		final Window2D w = new Window2D( topleft, bottomright );
+		
+		// fix the window of the part if the parent is also fixed
+		if( window.isFixed( ) ) ex.fixWindow( window.getMinCoord( ), window.getMaxCoord( ) );
+		
+		// include only those coordinates that are within the window
+		for( final Coord2D c : getKeys( ) )
+			if( w.contains( c ) ) ex.set( c, get( c ) );
+		
+		return ex;
 	}
 }

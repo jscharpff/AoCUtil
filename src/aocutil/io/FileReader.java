@@ -65,9 +65,21 @@ public class FileReader {
 		return res;
 	}
 	
+	/**
+	 * Reads the file and returns its contents as a single string
+	 *  
+	 * @return List of strings, one per new line
+	 * @throws IOException
+	 */
+	public String readAll( ) throws IOException {
+		String res = "";
+		for( final String s : readLines( ) )
+			res += s + "\n";
+		return res.substring( 0, res.length( ) - 1 );
+	}
 	
 	/**
-	 * Reads file
+	 * Reads file and returns the lines as a list of Strings
 	 * 
 	 * @return List of strings, one per new line
 	 * @throws IOException
