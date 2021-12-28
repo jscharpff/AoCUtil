@@ -1,4 +1,4 @@
-package aocutil;
+package aocutil.string;
 
 import java.util.Iterator;
 import java.util.stream.Stream;

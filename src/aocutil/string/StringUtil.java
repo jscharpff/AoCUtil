@@ -1,13 +1,13 @@
-package aocutil;
+package aocutil.string;
 
 import java.util.stream.Stream;
 
 /**
- * Common helper functions
+ * Common helper functions for easy string manipulation
  * 
  * @author Joris
  */
-public class Util {
+public class StringUtil {
 	/**
 	 * Parses a comma separated string into an int array
 	 * 
@@ -24,7 +24,7 @@ public class Util {
 	 * @param str The string to revers
 	 * @return The reversed string
 	 */
-	public static String reverseString( final String str ) {
+	public static String reverse( final String str ) {
 		 return new StringBuffer( str ).reverse( ).toString( );
 	}
 	
@@ -36,7 +36,7 @@ public class Util {
 	 * @param s2
 	 * @return The string difference
 	 */
-	public static String stringDifference( final String s1, final String s2, final boolean bothways ) {
+	public static String diff( final String s1, final String s2, final boolean bothways ) {
 		String result = "";
 		for( int i =  0 ; i < s1.length( ); i++ )
 			if( !s2.contains( "" + s1.charAt( i ) ) ) result += s1.charAt( i );
@@ -53,8 +53,8 @@ public class Util {
 	 * @param s2
 	 * @return
 	 */
-	public static String stringDifference( final String s1, final String s2 ) {
-		return stringDifference( s1, s2, false );
+	public static String diff( final String s1, final String s2 ) {
+		return diff( s1, s2, false );
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class Util {
 	 * @param check The string to check against the input
 	 * @return True iff all characters of the check string are in the input
 	 */
-	public static boolean stringContainsAll( final String input, final String check ) {
+	public static boolean containsAll( final String input, final String check ) {
 		for( int i = 0; i < check.length( ); i++ )
 			if( !input.contains( "" + check.charAt( i ) ) ) return false;
 		
