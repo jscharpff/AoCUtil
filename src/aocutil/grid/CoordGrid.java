@@ -55,13 +55,30 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	}
 	
 	/**
+	 * Fixes the window of this coordinate grid to its current size
+	 */
+	public void fixWindow( ) {
+		fixWindow( window );
+	}
+	
+	/**
+	 * Fixes the window of this coordinate grid to the specified window
+	 * 
+	 * @param fixwin The window to use as fixing window
+	 */
+	public void fixWindow( final Window2D fixwin ) {
+		if( fixwin == null || fixwin.empty( ) ) throw new RuntimeException( "Cannot fix an empty window" );
+		fixWindow( fixwin.getMinCoord( ), fixwin.getMaxCoord( ) );
+	}
+	
+	/**
 	 * Fixes the window of this coordinate grid
 	 * 
 	 * @param topleft The top left coordinate of the window
 	 * @param bottomright The bottom right coordinate of the window
 	 */
-	public void fixWindow( final Coord2D toploeft, final Coord2D bottomright ) {
-		window = new Window2D( toploeft, bottomright );
+	public void fixWindow( final Coord2D topleft, final Coord2D bottomright ) {
+		window = new Window2D( topleft, bottomright );
 	}
 	
 	/**
@@ -322,6 +339,13 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		return fromStringList( input, null, Integer::parseInt, -1 );
 	}
 	
+	/**
+	 * Shorthand function to construct a 
+	 */
+	public static CoordGrid<Boolean> fromBooleanGrid( final List<String> input, final char truechar ) {
+		return fromStringList( input, null, x -> x.equals( "" + truechar ), false );
+	}
+	
 
 	/**
 	 * Generates a grid-like output of the CoordGrid, from top-left coordinate to
@@ -346,7 +370,7 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		Coord2D prev = null;
 		for( final Coord2D c : this ) {
 			// new line after every row end
-			if( prev == null || prev.y != c.y ) res += "\n";
+			if( prev != null && prev.y != c.y ) res += "\n";
 			try {
 				res += stringFunc.apply( get( c ) );
 			} catch( final NullPointerException e ) {
