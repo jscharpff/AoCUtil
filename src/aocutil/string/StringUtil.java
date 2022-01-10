@@ -1,5 +1,7 @@
 package aocutil.string;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -8,6 +10,74 @@ import java.util.stream.Stream;
  * @author Joris
  */
 public class StringUtil {
+	/**
+	 * Creates a string by repeating the a single character for n times
+	 * 
+	 * @param c The character to repeat
+	 * @param n The number of repetitions
+	 * @return The string
+	 */
+	public static String repeat( final char c, final int n ) {
+		if( n < 0 ) throw new IllegalArgumentException( "The number of repetitions cannot be negative" );
+		final StringBuilder s = new StringBuilder( );
+		for( int i = 0; i < n; i++ ) s.append( c );
+		return s.toString( );
+	}
+	
+	/**
+	 * Creates a string by repeating the string for n times
+	 * 
+	 * @param str The string to repeat
+	 * @param n The number of repetitions
+	 * @return The string
+	 */
+	public static String repeat( final String str, final int n ) {
+		if( n < 0 ) throw new IllegalArgumentException( "The number of repetitions cannot be negative" );
+		final StringBuilder s = new StringBuilder( );
+		for( int i = 0; i < n; i++ ) s.append( str );
+		return s.toString( );
+	}
+	
+	/**
+	 * Extracts all repeating character sequences from the string
+	 * 
+	 * @param input The input string
+	 * @param minlength The minimal number of repeated characters to include it
+	 * @return List of all repeating sequences
+	 */
+	public static List<String> getRepeatingSequences( final String input, final int minlength ) {
+		return getRepeatingSequences( input, minlength, input.length( ) );
+	}
+	
+	/**
+	 * Extracts all repeating character sequences from the string
+	 * 
+	 * @param input The input string
+	 * @param minlength The minimal number of repeated characters to include it
+	 * @param maxlength The maximal number of repeated characters to include it
+	 * @return List of all repeating sequences
+	 */
+	public static List<String> getRepeatingSequences( final String input, final int minlength, final int maxlength ) {
+		final List<String> seqs = new ArrayList<>( );
+		if( input.length( ) < minlength ) return seqs;
+		
+		// start checking
+		int len = 0;
+		char prev = (char)(input.charAt( 0 ) - 1); /* not equal to first char */
+		for( final char c : input.toCharArray( ) ) {
+			if( prev == c ) {
+				len++;
+			} else {
+				if( len >= minlength && len <= maxlength ) seqs.add( repeat( prev, len ) );
+				len = 1;
+			}
+			prev = c;
+		}
+		
+		// check last part
+		if( len >= minlength && len <= maxlength ) seqs.add( repeat( prev, len ) );
+		return seqs;
+	}
 	
 	/**
 	 * Parses a comma separated string into a long array
@@ -66,6 +136,55 @@ public class StringUtil {
 		String res = "" + values[0];
 		for( int i = 1; i < values.length; i++ ) res += "," + values[i];
 		return res;
+	}
+	
+	/**
+	 * Converts an NxM matrix into a string
+	 * 
+	 * @param matrix The matrix containing the values
+	 * @param N The number of values in dimension 1
+	 * @param M The number of values in dimension 2
+	 * @return The string 
+	 */
+	public static String fromMatrix( final int[][] matrix, final int N, final int M ) {
+		final long[][] LM = new long[N][M];
+		for( int i = 0; i < N; i++ )
+			for( int j = 0; j < M; j++ )
+				LM[i][j] = matrix[i][j];
+		
+		return fromMatrix( LM, N, M );
+	}
+	
+	/**
+	 * Converts an NxM matrix into a string
+	 * 
+	 * @param matrix The matrix containing the values
+	 * @param N The number of values in dimension 1
+	 * @param M The number of values in dimension 2
+	 * @return The string 
+	 */
+	public static String fromMatrix( final long[][] matrix, final int N, final int M ) {
+		// determine column size of
+		long maxvalue = -1;
+		for( int i = 0; i < N; i++ )
+			for( int j = 0; j < M; j++ )
+				if( matrix[i][j] > maxvalue ) maxvalue = matrix[i][j];
+		int colsize = 1;
+		while( maxvalue >= 10 ) {
+			maxvalue /= 10;
+			colsize++;
+		}
+		
+		// now generate strings
+		final StringBuilder str = new StringBuilder( );
+		for( int r = 0; r < M; r++ ) {
+			for( int c = 0; c < N; c++ ) {
+				str.append( padLeft( "" + matrix[c][r], colsize ) );
+				if( c < N - 1 ) str.append( "  " );
+			}
+			if( r < M - 1 ) str.append( "\n" );
+		}
+		return str.toString( );
 	}
 	
 	/**
@@ -154,5 +273,17 @@ public class StringUtil {
 		for( int i = 0; i < input.length( ); i++ )
 			count += input.charAt( i ) == chr ? 1 : 0;
 		return count;
+	}
+	
+	/**
+	 * Returns a new string that is of the specified length, padded with spaces
+	 * in front
+	 * 
+	 * @param str The string to pad
+	 * @param len The string length
+	 * @return The left-padded string
+	 */
+	public static String padLeft( final String str, final int len ) {
+		return repeat( ' ', Math.max( 0, len - str.length( ) ) ) + str;
 	}
 }

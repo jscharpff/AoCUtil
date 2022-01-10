@@ -20,7 +20,7 @@ public abstract class LabeledObject {
 	 * @param label The label to hash the object by
 	 */
 	public LabeledObject( final String label ) {
-		if( label == null || label.length( ) == 0 ) throw new IllegalArgumentException( "Invalid label for LabeledObject" );
+		if( label == null || label.length( ) == 0 ) throw new IllegalArgumentException( "Invalid label for LabeledObject: " + label );
 		this.label = "" + label;
 		this.hashcode = label.hashCode( );
 	}

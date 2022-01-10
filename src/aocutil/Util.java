@@ -1,5 +1,7 @@
 package aocutil;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ public class Util {
 	 * Generates all permutations of the input array
 	 * 
 	 * @param <T> The object type of the array 
-	 * @param set The set to generate permutations of
+	 * @param array The array to generate permutations of
 	 * @return The list of permutations (as list)
 	 */
 	public static <T> List<List<T>> generatePermutations( final T[] array ) {
@@ -218,6 +220,31 @@ public class Util {
 		}
 	}
 	
+	/**
+	 * Converts the input string into a hash
+	 * 
+	 * @param input The input string
+	 * @return The hashed string
+	 */
+	public static String MD5( final String input ) {
+		try {
+			
+			final MessageDigest md = MessageDigest.getInstance("MD5");
+			final byte[] messageDigest = md.digest( input.getBytes("UTF-8") );
+
+			// Convert byte array into signum representation
+      final BigInteger no = new BigInteger(1, messageDigest);
+      
+      // Convert message digest into hex value
+      String hashtext = no.toString(16);
+      while (hashtext.length() < 32) {
+          hashtext = "0" + hashtext;
+      }
+      return hashtext;
+		} catch( Exception e ) {
+			throw new RuntimeException( "Failed to produce MD5 hash: " + e.toString( ) );
+		}
+	}
 	
 	/**
 	 * Sleeps for the specified amount of milliseconds, silences potential errors

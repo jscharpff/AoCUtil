@@ -1,4 +1,4 @@
-package aocutil.upqueue;
+package aocutil.collections.upqueue;
 
 /**
  * A single element of the UniquePriorityQueue

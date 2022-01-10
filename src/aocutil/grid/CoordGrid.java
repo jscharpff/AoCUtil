@@ -2,6 +2,7 @@ package aocutil.grid;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,16 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	}
 	
 	/**
+	 * Sets the value of an entire region of coordinates
+	 * 
+	 * @param region The region as a 2D window
+	 * @param value The value to set 
+	 */
+	public void set( final Window2D region, final T value ) {
+		for( final Coord2D c : region ) set( c, value );
+	}
+	
+	/**
 	 * Adds a new value to the coordinate grid at the specified coordinate
 	 * 
 	 * @param coord The coordinate to set the value for
@@ -99,7 +110,7 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	 * @return The previous value that was set, null if it was not set before
 	 */
 	public T set( final Coord2D coord, final T value ) {
-		if( value == null ) throw new RuntimeException( "NULL" );
+		if( value == null ) throw new NullPointerException( "Value cannot be set to null (use unset)" );
 		window.include( coord );
 		return map.put( coord, value );
 	}
@@ -260,6 +271,51 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		return window.contains( coord );
 	}
 	
+	/**
+	 * Retrieves all grid neighbours of the specified coordinate. If the grid
+	 * is of fixed size, this function will only return the neighbours that are
+	 * within the grid's window.
+	 * 
+	 * @param coord The coordinate
+	 * @param diagonal True to include diagonal neighbours
+	 * @return All neighbours within the grid of the given coordinate.
+	 * @throw {@link IllegalArgumentException} if the coordinate itself it
+	 *   outside the grid
+	 */
+	public Set<Coord2D> getNeighbours( final Coord2D coord, final boolean diagonal ) {
+		return getNeighbours( coord, diagonal, null );
+	}
+	
+	/**
+	 * Retrieves all grid neighbours of the specified coordinate. If the grid
+	 * is of fixed size, this function will only return the neighbours that are
+	 * within the grid's window.
+	 * 
+	 * @param coord The coordinate
+	 * @param diagonal True to include diagonal neighbours
+	 * @param validneighbour Validation function that includes/excludes
+	 *   neighbouring coords based upon their value, a result of true will
+	 *   include the coordinate
+	 * @return All neighbours within the grid of the given coordinate.
+	 * @throw {@link IllegalArgumentException} if the coordinate itself it
+	 *   outside the grid
+	 */
+	public Set<Coord2D> getNeighbours( final Coord2D coord, final boolean diagonal, final Function<T, Boolean> validneighbour ) {
+		if( !contains( coord ) ) throw new IllegalArgumentException( "The coordinate is not within the grid: " + coord );
+		
+		final Set<Coord2D> neighbours = new HashSet<>( );
+		for( final Coord2D n : coord.getAdjacent( diagonal ) ) {
+			if( window.isFixed( ) && !contains( n ) ) continue;
+			if( validneighbour != null && !validneighbour.apply( get( n ) ) ) continue;
+			
+			neighbours.add( n );
+		}
+		
+		return neighbours;
+	}
+
+	
+	
 	/** 
 	 * Determines and returns the size of the current grid, i.e. the span between
 	 * minimal and maximal coordinate
@@ -319,7 +375,9 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 			int x = -1;
 			for( final String col : row.split( sep ) ) {
 				x++;
-				grid.set( new Coord2D( x, y ), mapfunc.apply( col ) );
+				final U value = mapfunc.apply( col );
+				if( defaultValue != null && !defaultValue.equals( value ) )
+					grid.set( new Coord2D( x, y ), value );
 			}
 		}
 
@@ -340,10 +398,25 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	}
 	
 	/**
-	 * Shorthand function to construct a 
+	 * Shorthand function to construct a boolean grid
+	 * 
+	 * @param input The list of strings that contains a single-char grid
+	 * @param truechar The character that represents a true value
+	 * @return The boolean valued CoordGrid
 	 */
 	public static CoordGrid<Boolean> fromBooleanGrid( final List<String> input, final char truechar ) {
 		return fromStringList( input, null, x -> x.equals( "" + truechar ), false );
+	}
+	
+	/**
+	 * Shorthand function to construct a single-character grid
+	 * 
+	 * @param input The list of strings that contains a single-char grid
+	 * @param defaultchar The default value for non-set columns
+	 * @return The character based valued CoordGrid
+	 */
+	public static CoordGrid<Character> fromCharGrid( final List<String> input, final char defaultchar ) {
+		return fromStringList( input, null, x -> x.charAt( 0 ), defaultchar );
 	}
 	
 
@@ -366,21 +439,21 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	 * @return A grid of 
 	 */
 	public String toString( final Function<T, String> stringFunc ) {
-		String res = "";
+		final StringBuilder res = new StringBuilder( );
 		Coord2D prev = null;
 		for( final Coord2D c : this ) {
 			// new line after every row end
-			if( prev != null && prev.y != c.y ) res += "\n";
+			if( prev != null && prev.y != c.y ) res.append( '\n' );
 			try {
-				res += stringFunc.apply( get( c ) );
+				res.append( stringFunc.apply( get( c ) ) );
 			} catch( final NullPointerException e ) {
-				res += "N";
+				res.append( 'N' );
 			}
 			prev = c;
 		}
 		
 		// return result minus the last newline
-		return res;
+		return res.toString( );
 	}
 	
 	/**

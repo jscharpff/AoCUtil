@@ -75,13 +75,13 @@ public class Rotation3D {
 	 * @param coord A array of three doubles that contains the values per axis
 	 * @return An array of 3 doubles containing the result of the roatation
 	 */
-	public double[] apply( final double[] in ) {
-		if( in.length != 3 ) throw new IllegalArgumentException( "The input array should have exactly 3 elements" );
+	public double[] apply( final double[] coord ) {
+		if( coord.length != 3 ) throw new IllegalArgumentException( "The input array should have exactly 3 elements" );
 		
 		return new double[] {
-				in[0] * R[0][0] + in[1] * R[0][1] + in[2] * R[0][2], 
-				in[0] * R[1][0] + in[1] * R[1][1] + in[2] * R[1][2], 
-				in[0] * R[2][0] + in[1] * R[2][1] + in[2] * R[2][2]
+				coord[0] * R[0][0] + coord[1] * R[0][1] + coord[2] * R[0][2], 
+				coord[0] * R[1][0] + coord[1] * R[1][1] + coord[2] * R[1][2], 
+				coord[0] * R[2][0] + coord[1] * R[2][1] + coord[2] * R[2][2]
 		};
 	}
 	

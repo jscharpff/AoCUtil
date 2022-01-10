@@ -135,10 +135,10 @@ public class Coord2D {
 	/**
 	 * Finds all neighbouring coordinates of this Coord2D
 	 * 
-	 * @param diagonal True to include diagonal positions
+	 * @param diagonals True to include diagonal positions
 	 * @return Collection containing all neighbouring positions
 	 */
-	public Collection<Coord2D> getNeighbours( final boolean diagonals ) {
+	public Collection<Coord2D> getAdjacent( final boolean diagonals ) {
 		final Collection<Coord2D> N = new ArrayList<>( diagonals ? 8 : 4 );
 		
 		// add regular neighbours

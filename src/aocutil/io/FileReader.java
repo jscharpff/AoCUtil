@@ -14,7 +14,7 @@ public class FileReader {
 	/** 
 	 * Creates a new FileReader
 	 * 
-	 * @param uri The resource identifier of the file
+	 * @param url The resource identifier of the file
 	 */
 	public FileReader( URL url ) {
 		this( url.getFile( ) );

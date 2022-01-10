@@ -29,6 +29,13 @@ public class Cube3D {
 	
 	/**
 	 * Creates a new Cube from the given set of coordinates
+	 *  
+	 * @param x1
+	 * @param x2
+	 * @param y1
+	 * @param y2
+	 * @param z1
+	 * @param z2
 	 */
 	public Cube3D( final int x1, final int x2, final int y1, final int y2, final int z1, final int z2 ) {
 		minCoord = new Coord3D( Math.min( x1, x2 ), Math.min( y1, y2 ), Math.min( z1, z2 ) );

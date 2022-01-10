@@ -42,6 +42,7 @@ public class Path {
 	 * Copies the path and appends the node
 	 * 
 	 * @param node The node to add
+	 * @return The new path with the node appended
 	 */
 	public Path extend( final Node node ) {
 		return new Path( this, node );

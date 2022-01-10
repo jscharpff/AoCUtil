@@ -1,4 +1,4 @@
-package aocutil.upqueue;
+package aocutil.collections.upqueue;
 
 import java.util.HashMap;
 import java.util.Map;

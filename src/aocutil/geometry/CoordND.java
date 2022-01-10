@@ -146,7 +146,7 @@ public class CoordND {
 	}
 	
 	/**
-	 * @returns The size of this 3D coordinate, which is defined by the square
+	 * @return The size of this 3D coordinate, which is defined by the square
 	 * root of the sum of squared elements
 	 */
 	public double size( ) {

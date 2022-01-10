@@ -16,13 +16,13 @@ public class Line2D {
 	public final Coord2D B;
 
 	/**
-	 * Creates a new lien segment from point A to B
+	 * Creates a new line segment from point A to B
 	 * 
 	 * @param a The starting point
 	 * @param b The ending point
 	 */
-	public Line2D( final Coord2D A, final Coord2D B ) {
-		this.A = A; this.B = B;
+	public Line2D( final Coord2D a, final Coord2D b ) {
+		this.A = a; this.B = b;
 	}
 	
 	

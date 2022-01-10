@@ -129,6 +129,23 @@ public class BitString implements Iterable<Boolean> {
 		return ~val & LENGTH_MASK;
 	}
 	
+	/**
+	 * Count the number of ones in the bit string
+	 * 
+	 * @return The number of one bits
+	 */
+	public int countOnes( ) {
+		return stream( ).mapToInt( x -> x ? 1 : 0 ).sum( );
+	}
+	
+	/**
+	 * Count the number of zeroes in the bit string
+	 * 
+	 * @return The number of zero bits
+	 */
+	public int countZeroes( ) {
+		return length - countOnes( );
+	}
 	
 	/**
 	 * Computes the bit mask with a 1 in the bit that corresponds to the index

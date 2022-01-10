@@ -24,6 +24,17 @@ public class Window2D implements Iterable<Coord2D> {
 	}
 	
 	/**
+	 * Constructs a new window from (0,0) to (width-1, height-1). This will
+	 * create a window of fixed size
+	 * 
+	 * @param width The window width
+	 * @param height The window height
+	 */
+	public Window2D( final int width, final int height ) {
+		this( 0, 0, width - 1, height - 1 );
+	}
+	
+	/**
 	 * Constructs a new window from the given min and max x and y values. This
 	 * will create a window of fixed size, i.e. it will not resize to include
 	 * coordinates if requested
