@@ -42,7 +42,7 @@ public class FileReader {
 		for( final String line : lines ) {
 			// split within line by comma, if there are any
 			for( final String s : line.split( "," ) )
-				values.add( Integer.parseInt( s ) );
+				values.add( Integer.parseInt( s.trim( ) ) );
 		}
 		
 		return values.stream( ).mapToInt( Integer::intValue ).toArray( );

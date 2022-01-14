@@ -286,4 +286,24 @@ public class BitString implements Iterable<Boolean> {
 			res = (b ? "1" : "0") + res;
 		return res;
 	}
+	
+	/**
+	 * Compares two bitstrings
+	 * 
+	 * @param obj The other object
+	 * @return True if the other object is a valid BitString with the same length
+	 *   and encodes the same value
+	 */
+	@Override
+	public boolean equals( Object obj ) {
+		if( obj == null || !(obj instanceof BitString) ) return false;
+		final BitString b = (BitString)obj;
+		return length == b.length && value == b.value;
+	}
+	
+	/** @return The hash code of the unique identifying string */
+	@Override
+	public int hashCode( ) {
+		return toString( ).hashCode( );
+	}
 }

@@ -1,6 +1,7 @@
 package aocutil.string;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -139,6 +140,19 @@ public class StringUtil {
 	}
 	
 	/**
+	 * Converts an array of doubles into a comma separated string
+	 * 
+	 * @param values The values
+	 * @return The comma separated string of values
+	 */
+	public static String fromArray( final double[] values ) {
+		if( values.length == 0 ) return "";
+		String res = "" + values[0];
+		for( int i = 1; i < values.length; i++ ) res += "," + values[i];
+		return res;
+	}
+	
+	/**
 	 * Converts an NxM matrix into a string
 	 * 
 	 * @param matrix The matrix containing the values
@@ -185,7 +199,7 @@ public class StringUtil {
 			if( r < M - 1 ) str.append( "\n" );
 		}
 		return str.toString( );
-	}
+	}	
 	
 	/**
 	 * Reverses a string
@@ -262,6 +276,32 @@ public class StringUtil {
 	}
 	
 	/**
+	 * Sorts all the characters in the string alphabetically
+	 * 
+	 * @param input The string to sort
+	 * @return The alphabetically ordered string
+	 */
+	public static String sort( final String input ) {
+		final char[] chars = input.toCharArray( );
+		Arrays.sort( chars );
+		return String.valueOf( chars );
+	}
+	
+	/**
+	 * Checks if the strings are anagrams, i.e. they have exactly the same
+	 * characters but in a (potentially) different order
+	 * 
+	 * @param s1
+	 * @param s2
+	 * @return True if s1 is an anagram of s2
+	 */
+	public static boolean isAnagram( final String s1, final String s2 ) {
+		if( s1.length( ) != s2.length( ) ) return false;
+		
+		return sort( s1 ).equals( sort( s2 ) );		
+	}
+	
+	/**
 	 * Counts the number of occurrences of the specified character
 	 * 
 	 * @param input The string to count within
@@ -284,6 +324,19 @@ public class StringUtil {
 	 * @return The left-padded string
 	 */
 	public static String padLeft( final String str, final int len ) {
-		return repeat( ' ', Math.max( 0, len - str.length( ) ) ) + str;
+		return padLeft( str, len, ' ' );
 	}
+	
+	/**
+	 * Returns a new string that is of the specified length, padded with the 
+	 * specified padding character
+	 *  
+	 * @param str The string to pad
+	 * @param len The string length
+	 * @param padchar The padding character
+	 * @return The left-padded string
+	 */
+	public static String padLeft( final String str, final int len, final char padchar ) {
+		return repeat( padchar, Math.max( 0, len - str.length( ) ) ) + str;
+	}	
 }

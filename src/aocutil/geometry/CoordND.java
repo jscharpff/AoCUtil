@@ -146,13 +146,13 @@ public class CoordND {
 	}
 	
 	/**
-	 * @return The size of this 3D coordinate, which is defined by the square
+	 * @return The size of this coordinate, which is defined by the square
 	 * root of the sum of squared elements
 	 */
 	public double size( ) {
-		int size = 0;
+		double size = 0;
 		for( int i = 0; i < N; i++ )
-			size += values[i] * values[i];
+			size += (double)values[i] * (double)values[i];
 		return Math.sqrt( size );
 	}
 	

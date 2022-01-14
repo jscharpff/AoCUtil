@@ -51,7 +51,7 @@ public class Node {
 	 * @param edge The edge
 	 * @return False if the edge was already known
 	 */
-	public boolean addEdge( final Edge edge ) {
+	protected boolean addEdge( final Edge edge ) {
 		assert equals( edge.to ) || equals( edge.from) : "Node " + toString( ) + " is not the incoming node of arc " + edge.toString( );
 
 		// prevent duplicate arcs

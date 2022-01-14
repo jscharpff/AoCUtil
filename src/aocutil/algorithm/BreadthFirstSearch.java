@@ -74,8 +74,7 @@ public class BreadthFirstSearch {
 					distances.put( exp, dist );
 					if( distances.size( ) == targets.size( ) ) return distances;
 				}
-				
-				
+								
 				// generate the next values from it that will be considered in the
 				// next iteration
 				explorenext.addAll( nextfunc.apply( exp ) );
@@ -90,4 +89,34 @@ public class BreadthFirstSearch {
 		throw new RuntimeException( "Failed to find all of the targets " + targets + " from " + initial + " (found " + distances + ")" );
 	}
 
+	/**
+	 * Finds the set of all values reachable from the given starting value using
+	 * the given function to determine the new values to explore
+	 * 
+	 * @param <T> The type of value to search over
+	 * @param startvalue The initial value to start search from
+	 * @param nextfunc The function that generates the next values to explore
+	 * @return The set of all visited values
+	 */
+	public static <T> Set<T> getReachable( final T startvalue, final Function<T, Collection<T>> nextfunc ) {
+		final Set<T> visited = new HashSet<>( );
+		Stack<T> explore = new Stack<>( );
+		explore.add( startvalue );
+		
+		while( !explore.empty( ) ) {
+			final Stack<T> toexplore = new Stack<>( );
+			
+			while( !explore.empty( ) ) {
+				final T exp = explore.pop( );
+				if( visited.contains( exp ) ) continue;
+				visited.add( exp );
+				
+				toexplore.addAll( nextfunc.apply( exp ) );
+				
+			}
+			explore = toexplore;
+		}	
+		
+		return visited;		
+	}
 }

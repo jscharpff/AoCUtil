@@ -27,6 +27,18 @@ public class Coord3D extends CoordND {
 	}
 	
 	/**
+	 * Creates a new 3D coordinate
+	 * 
+	 * @param value Array that contains the value for each axis
+	 */
+	public Coord3D( final int[] values  ) {
+		super( values );
+		this.x = values[0];
+		this.y = values[1];
+		this.z = values[2];
+	}
+	
+	/**
 	 * Converts a N-dimensional coordinate with 3 dimensions to a Coord3D
 	 * 
 	 * @param coord The CoordND object of 3 dimensions

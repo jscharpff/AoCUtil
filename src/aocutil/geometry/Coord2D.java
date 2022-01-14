@@ -35,6 +35,16 @@ public class Coord2D {
 	}
 	
 	/**
+	 * Computes new coordinate when moving using the coordinates of another point
+	 * 
+	 * @param coord The other coordinate
+	 * @return A new coordinate that represents coord + this
+	 */
+	public Coord2D move( final Coord2D coord ) {
+		return move( coord.x, coord.y );
+	}
+	
+	/**
 	 * Computes new coordinate when moving with specified dx and dy
 	 * 
 	 * @param dx Horizontal movement
@@ -48,13 +58,24 @@ public class Coord2D {
 	/**
 	 * Moves in the specified direction
 	 * 
-	 * @param direction The angle to move in (0 = North)
+	 * @param dir The compass direction
+	 * @param distance The distance to travel
+	 * @return The new position
+	 */
+	public Coord2D moveDir( final Direction dir, final int distance ) {
+		return moveDir( dir.getRotation( ), distance );
+	}
+	
+	/**
+	 * Moves in the specified direction
+	 * 
+	 * @param angulardir The angle to move in (0 = North)
 	 * @param distance The distance to move
 	 * @return The new position
 	 */
-	public Coord2D moveDir( final int direction, final int distance ) {
+	public Coord2D moveDir( final int angulardir, final int distance ) {
 		// for now only the 4 major directions are supported
-		final int d = direction % 360;
+		final int d = angulardir % 360;
 		switch( d ) {
 			case 0: return move( 0, -distance );
 			case 90: return move( distance, 0 );
