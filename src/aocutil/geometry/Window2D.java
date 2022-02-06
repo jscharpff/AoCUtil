@@ -205,6 +205,12 @@ public class Window2D implements Iterable<Coord2D> {
 		if( empty( ) ) throw new RuntimeException( "The current window is not defined" );
 		return getMaxCoord( ).y;
 	}
+	
+	/** @return The width of the window */
+	public int getWidth( ) { return size( ).x; }
+	
+	/** @return The height of the window */
+	public int getHeight( ) { return size( ).y; }
 
 	/**
 	 * Creates an Iterator that goes over all coordinates in the window

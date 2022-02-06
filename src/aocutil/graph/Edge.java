@@ -15,6 +15,9 @@ public class Edge {
 	/** The weight of the arc */
 	protected int weight;
 	
+	/** True if the edge is an arc, i.e. it is directional */
+	protected final boolean directional;
+	
 	/**
 	 * Constructs a new edge between A and B width weight w
 	 * 
@@ -23,10 +26,24 @@ public class Edge {
 	 * @param weight The edge weight
 	 */
 	public Edge( final Node A, final Node B, final int weight ) {
+		this( A, B, weight, false );
+	}
+	
+	/**
+	 * Constructs a new edge between A and B width weight w
+	 * 
+	 * @param A The starting node
+	 * @param B The ending node
+	 * @param weight The edge weight
+	 * @param isarc True if the edge is a directional arc
+	 */
+	public Edge( final Node A, final Node B, final int weight, final boolean isarc ) {
 		this.from = A;
 		this.to = B;
 		this.weight = weight;
+		this.directional = isarc;
 	}
+		
 	
 	/** @return The start node */
 	public Node getFrom( ) { return from; }
@@ -51,13 +68,15 @@ public class Edge {
 	/** @return The edge weight */
 	public int getWeight( ) { return weight; }
 
+	/** @return True if the edge is a directional arc */
+	public boolean isArc( ) { return directional; }
+	
 	/**
 	 * @return String representation of the edge
 	 */
 	public String toString( ) {
-		if( weight > 0 ) return from.toString( ) + "-(" + weight + ")-" + to.toString( );
-		
-		return from.toString( ) + "-" + to.toString( );
+		if( weight > 0 ) return from.toString( ) + (directional ? "<" : "") + "-(" + weight + ")->" + to.toString( );		
+		return from.toString( ) + (!directional ? "<" : "") + "->" + to.toString( );
 	}
 	
 	/**

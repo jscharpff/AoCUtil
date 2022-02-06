@@ -26,7 +26,7 @@ public class RegexMatcher {
 	 * @param pattern The pattern to regex on 
 	 */
 	public RegexMatcher( final String pattern ) {
-		this.pattern = Pattern.compile( pattern );
+		this.pattern = Pattern.compile( toRegex( pattern ) );
 		matched = false;
 	}
 	
@@ -64,7 +64,7 @@ public class RegexMatcher {
 	 * @param input The input string
 	 * @return True if the string was matched
 	 */
-	public boolean match( final String input ) throws IllegalArgumentException {
+	public boolean match( final String input ) {
 		matchstring = "" + input;
 		matcher = pattern.matcher( matchstring );
 		matched = matcher.find( );
@@ -246,5 +246,17 @@ public class RegexMatcher {
 		result = result.replaceAll( "#Ds", "\\\\s*(-?\\\\d+)\\\\s*" );
 		result = result.replaceAll( "#D", "(-?\\\\d+)" );
 		return result;
+	}
+	
+	/** @return The current pattern that is matched and the matching state */
+	@Override
+	public String toString( ) {
+		final StringBuilder sb = new StringBuilder( );
+		sb.append( "[pattern=" );
+		sb.append( pattern );
+		sb.append( ", matched=" );
+		sb.append( matched );
+		sb.append( "]" );
+		return sb.toString( );
 	}
 }

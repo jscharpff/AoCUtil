@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * 
  *  @author Joris
  */
-public class Coord2D {
+public class Coord2D implements Comparable<Coord2D> {
 	/** The horizontal position */
 	public final int x;
 	
@@ -192,6 +192,19 @@ public class Coord2D {
 		final Coord2D c = (Coord2D)obj;
 		
 		return c.x == x && c.y == y;
+	}
+	
+	/**
+	 * Compares two coordinates and returns the one with the smallest y or, if
+	 * equal, the smallest x
+	 * 
+	 * @param coord The coordinate to compare to
+	 * @return The difference in y coordinates. If this is equal, the x
+	 *   difference is returned  
+	 */
+	@Override
+	public int compareTo( final Coord2D coord ) {
+		return this.y != coord.y ? this.y - coord.y : this.x - coord.x;
 	}
 	
 	/**

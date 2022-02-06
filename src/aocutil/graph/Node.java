@@ -72,7 +72,22 @@ public class Node {
 	public Collection<Node> getNeighbours( ) {
 		final Set<Node> neighbours = new HashSet<>( );
 		for( final Edge e : edges ) {
-			neighbours.add( e.getOther( this ) );
+			if( e.isArc( ) ) {
+				if( e.from.equals( this ) ) neighbours.add( e.to ); 
+			} else neighbours.add( e.getOther( this ) );
+		}
+		return neighbours;
+	}
+	
+	/**
+	 * @return The set of all nodes that are parent nodes of this one
+	 */
+	public Collection<Node> getPredecessors( ) {
+		final Set<Node> neighbours = new HashSet<>( );
+		for( final Edge e : edges ) {
+			if( e.isArc( ) ) {
+				if( e.to.equals( this ) ) neighbours.add( e.from ); 
+			} else neighbours.add( e.getOther( this ) );
 		}
 		return neighbours;
 	}

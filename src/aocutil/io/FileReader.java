@@ -36,17 +36,29 @@ public class FileReader {
 	 * @throws IOException 
 	 */
 	public int[] readIntArray() throws IOException {
+		return readIntArray( "," );
+	}
+	
+	/**
+	 * Reads the entire file and parses lines into an Int array
+	 *  
+	 * @param separator The separator used in the input file
+	 * @return Array of integers, one per line
+	 * @throws IOException 
+	 */
+	public int[] readIntArray( final String separator ) throws IOException {
 		final List<String> lines = this.readLines( );
 		final List<Integer> values = new ArrayList<>( lines.size( ) );
 		
 		for( final String line : lines ) {
 			// split within line by comma, if there are any
-			for( final String s : line.split( "," ) )
+			for( final String s : line.split( separator ) )
 				values.add( Integer.parseInt( s.trim( ) ) );
 		}
 		
 		return values.stream( ).mapToInt( Integer::intValue ).toArray( );
 	}
+	
 	
 	/**
 	 * Reads the entire file and parses lines into a long array

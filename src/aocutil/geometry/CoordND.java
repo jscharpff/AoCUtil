@@ -5,6 +5,8 @@ import java.util.function.IntBinaryOperator;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
+import aocutil.string.RegexMatcher;
+
 /**
  * A N dimensional coordinate
  * 
@@ -167,6 +169,17 @@ public class CoordND {
 		res += ")";
 		
 		return res;
+	}
+	
+	/**
+	 * Builds a coordinate from a string description (x,y,z,...)
+	 * 
+	 * @param input The input string
+	 * @return The cooridnate
+	 */
+	public static CoordND fromString( final String input ) {
+		final RegexMatcher rm = new RegexMatcher( "(-?\\d+),?\\s*" );
+		return new CoordND( rm.matchAll( input ).stream( ).mapToInt( r -> Integer.parseInt( r.group( 1 ) ) ).toArray( ) );
 	}
 	
 	/** @return The string's hashcode */
