@@ -29,7 +29,7 @@ public class Coord3D extends CoordND {
 	/**
 	 * Creates a new 3D coordinate
 	 * 
-	 * @param value Array that contains the value for each axis
+	 * @param values Array that contains the value for each axis
 	 */
 	public Coord3D( final int[] values  ) {
 		super( values );

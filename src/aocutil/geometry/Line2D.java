@@ -25,6 +25,51 @@ public class Line2D {
 		this.A = a; this.B = b;
 	}
 	
+	/** @return The length of the line segment */
+	public int length( ) {
+		return A.getManhattanDistance( B );
+	}
+	
+	/**
+	 * Checks if this line contains the specific coordinate
+	 * 
+	 * @param coord The coordinate to test
+	 * @return True iff the coordinate is on the line
+	 */
+	public boolean contains( final Coord2D coord ) {
+		// do a quick test whether they intersect at all
+		final Coord2D min = new Coord2D( Math.min( A.x, B.x ), Math.min( A.y, B.y ) );
+		final Coord2D max = new Coord2D( Math.max( A.x, B.x ), Math.max( A.y, B.y ) );
+
+		if( coord.x < min.x || coord.x > max.x ) return false;
+		if( coord.y < min.y || coord.y > max.y ) return false;
+		
+		return getPoints( ).contains( coord );
+	}
+	
+	/**
+	 * Checks if this line intersects with another line
+	 * 
+	 * @param line The other line segment
+	 * @return The coordinate of intersection or null if they do not intersect
+	 */
+	public Coord2D intersect( final Line2D line ) {
+		// do a quick test whether they intersect at all
+		final Coord2D min1 = new Coord2D( Math.min( A.x, B.x ), Math.min( A.y, B.y ) );
+		final Coord2D max1 = new Coord2D( Math.max( A.x, B.x ), Math.max( A.y, B.y ) );
+		final Coord2D min2 = new Coord2D( Math.min( line.A.x, line.B.x ), Math.min( line.A.y, line.B.y ) );
+		final Coord2D max2 = new Coord2D( Math.max( line.A.x, line.B.x ), Math.max( line.A.y, line.B.y ) );
+		if( min1.x > max2.x || max1.x < min2.x ) return null;
+		if( min1.y > max2.y || max1.y < min2.y ) return null;
+		
+
+		// they might, do a point by point comparison
+		final List<Coord2D> points = this.getPoints( );
+		points.retainAll( line.getPoints( ) );
+		
+		if( points.size( ) > 1 ) throw new RuntimeException( "Multiple intersections" );
+		return points.size( ) == 1 ? points.get( 0 ) : null;
+	}
 	
 	/**
 	 * Computes list of points on line segment from A to B with step size 1

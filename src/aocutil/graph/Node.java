@@ -79,8 +79,13 @@ public class Node {
 		return neighbours;
 	}
 	
+	/** @return The collection of all nodes that are child nodes of this one */
+	public Collection<Node> getSuccessors( ) {		
+		return getNeighbours( );
+	}
+	
 	/**
-	 * @return The set of all nodes that are parent nodes of this one
+	 * @return The collection of all nodes that are parent nodes of this one
 	 */
 	public Collection<Node> getPredecessors( ) {
 		final Set<Node> neighbours = new HashSet<>( );

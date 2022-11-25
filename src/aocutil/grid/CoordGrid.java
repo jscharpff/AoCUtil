@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -245,6 +246,14 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		return count;
 	}
 
+	/** 
+	 * @return The collection of <key, value> entries for every key that has a
+	 *   set value in the grid
+	 */
+	public Set<Entry<Coord2D, T>> getEntries( ) {
+		return map.entrySet( );
+	}
+	
 	/**
 	 * @return The collection of coordinates that have a set value in the grid
 	 */

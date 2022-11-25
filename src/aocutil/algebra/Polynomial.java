@@ -1,6 +1,6 @@
 package aocutil.algebra;
 
-public class Polynomial {
+public class Polynomial implements AlgebraicFunction {
 	/** The coefficients */
 	private final double a, b, c;
 	
@@ -23,6 +23,7 @@ public class Polynomial {
 	 * @param x The x value
 	 * @return The y value
 	 */
+	@Override
 	public double get( final double x ) {
 		return a * x * x + b * x + c;
 	}
@@ -33,6 +34,7 @@ public class Polynomial {
 	 * @param factor The factor to apply to the coefficients
 	 * @return The new polynomial y = f*ax^2 + f*bx + f*c
 	 */
+	@Override
 	public Polynomial scale( final double factor ) {
 		return new Polynomial( a * factor, b * factor, c * factor );
 	}

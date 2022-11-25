@@ -65,7 +65,7 @@ public class Graph {
 	/**
 	 * Checks if the node is already present in the graph
 	 * 
-	 * @param node The node to check
+	 * @param label The node to check
 	 * @return True if the graph contains the node
 	 */
 	public boolean contains( final String label ) {

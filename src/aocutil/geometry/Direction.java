@@ -15,14 +15,19 @@ public enum Direction {
 	/**
 	 * Reconstructs the direction from its single-letter representation
 	 * 
-	 * @param dir The character of the direction (N,E,S,W)
+	 * @param dir The character of the direction (N,E,S,W) or (U,R,D,L)
 	 * @return The direction
 	 */
 	public static Direction fromLetter( final char dir ) {
-		for( final Direction d : values( ) )
-			if( d.toString( ).substring( 0, 1 ).equals( ("" + dir).toUpperCase( ) ) ) return d;
-		
-		throw new IllegalArgumentException( "Invalid direction letter: " + dir );
+		switch( dir ) {
+			case 'N': case 'U': return North;
+			case 'E': case 'R': return East;
+			case 'S': case 'D': return South;
+			case 'W': case 'L': return West;
+			
+			default:
+				throw new IllegalArgumentException( "Invalid direction letter: " + dir );
+		}
 	}
 	
 	/**

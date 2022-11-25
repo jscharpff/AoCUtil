@@ -25,6 +25,9 @@ public abstract class LabeledObject {
 		this.hashcode = label.hashCode( );
 	}
 	
+	/** @return The label */
+	public String getLabel( ) { return label; }
+	
 	/**
 	 * Simple equals function that simply checks labels
 	 * 

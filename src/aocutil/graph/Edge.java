@@ -19,6 +19,16 @@ public class Edge {
 	protected final boolean directional;
 	
 	/**
+	 * Constructs a new unweighted edge between A and B
+	 * 
+	 * @param A The starting node
+	 * @param B The ending node
+	 */
+	public Edge( final Node A, final Node B ) {
+		this( A, B, 0, false );
+	}
+	
+	/**
 	 * Constructs a new edge between A and B width weight w
 	 * 
 	 * @param A The starting node

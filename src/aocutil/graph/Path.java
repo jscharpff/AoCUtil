@@ -31,6 +31,11 @@ public class Path {
 		this.nodes.add( newnode );
 	}
 	
+	/** @return The list of nodes in this path */
+	public List<Node> getNodes( ) {
+		return nodes;
+	}
+	
 	/**
 	 * @return The last node in the path
 	 */
@@ -61,5 +66,20 @@ public class Path {
 	/** @return The number of nodes in the path */
 	public int size( ) {
 		return nodes.size( );
+	}
+	
+	/** @return The path string description with its nodes */
+	@Override
+	public String toString( ) {
+		if( size( ) == 0 ) return "[]";
+		final StringBuilder sb = new StringBuilder( );
+		sb.append( "[" );
+		sb.append( nodes.get( 0 ).getLabel( ) );
+		for( int i = 1; i < size( ); i++ ) {
+			sb.append( "," );
+			sb.append( nodes.get( i ) );
+		}
+		sb.append( "]" );
+		return sb.toString( );
 	}
 }

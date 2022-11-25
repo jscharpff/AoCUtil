@@ -31,7 +31,7 @@ public class BreadthFirstSearch {
 	public static <T> long getDistance( final T initial, final T target, final Function<T, Collection<T>> nextfunc ) {
 		final Set<T> targets = new HashSet<>( );
 		targets.add( target );
-		final Map<T, Long> distances = getDistances( initial, targets, nextfunc );
+		final Map<T, Long> distances = getDistances( initial, targets, nextfunc, true );
 		return distances.get( target );
 	}
 	
@@ -47,6 +47,23 @@ public class BreadthFirstSearch {
 	 * @return The distance from initial to target in terms of number of BFS iterations
 	 */
 	public static <T> Map<T, Long> getDistances( final T initial, final Collection<T> targets, final Function<T, Collection<T>> nextfunc ) {
+		return getDistances( initial, targets, nextfunc, true );
+	}
+
+	
+	/**
+	 * Simple BFS implementation to find the distance from a given initial object
+	 * to a set of targets.
+	 *  
+	 * @param <T> The type of the objects we are searching over
+	 * @param initial The initial object where the search starts from
+	 * @param targets The set of target values we are looking for
+	 * @param nextfunc The function that generates the set of next values to
+	 *   consider
+	 * @param findall True to require all targets to be found 
+	 * @return The distance from initial to target in terms of number of BFS iterations
+	 */
+	public static <T> Map<T, Long> getDistances( final T initial, final Collection<T> targets, final Function<T, Collection<T>> nextfunc, final boolean findall ) {
 		// initialise explore stack from initial state and keep track of visited
 		// values
 		final Set<T> visited = new HashSet<>( );
@@ -88,7 +105,10 @@ public class BreadthFirstSearch {
 		}
 		
 		// not all targets were found
-		throw new RuntimeException( "Failed to find all of the targets " + targets + " from " + initial + " (found " + distances + ")" );
+		if( findall )
+			throw new RuntimeException( "Failed to find all of the targets " + targets + " from " + initial + " (found " + distances + ")" );
+		else
+			return distances;
 	}
 
 	/**
