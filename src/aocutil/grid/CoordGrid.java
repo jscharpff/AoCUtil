@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import aocutil.geometry.Coord2D;
 import aocutil.geometry.Window2D;
@@ -429,6 +433,33 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	@Override
 	public Iterator<Coord2D> iterator( ) {
 		return window.iterator( );
+	}
+	
+	/**
+	 * Returns a stream of the coordinates in this map, based upon the iterator.
+	 * That is, the coordinates are returned in order of their column first and
+	 * then their row number. This function will return a parallel stream by
+	 * default.  
+	 * 
+	 * @return The stream of coordinates in this grid
+	 */
+	public Stream<Coord2D> stream( ) {
+		return stream( true );
+	}
+	
+	/**
+	 * Returns a stream of the coordinates in this map, based upon the iterator.
+	 * That is, the coordinates are returned in order of their column first and
+	 * then their row number.  
+	 * 
+	 * @param parallel True to allow parallel streaming of the coordinates in
+	 *   the grid
+	 * @return The stream of coordinates in this grid
+	 */
+	public Stream<Coord2D> stream( final boolean parallel ) {
+		return StreamSupport.stream( 
+				Spliterators.spliterator( iterator( ), map.size( ), Spliterator.DISTINCT |Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.NONNULL | Spliterator.SUBSIZED )
+				, parallel );
 	}
 	
 	/**
