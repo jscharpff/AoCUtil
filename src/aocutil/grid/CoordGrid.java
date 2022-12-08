@@ -215,7 +215,7 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	 * 
 	 * @param coord The coordinate to update
 	 * @param updatefunc The function to update the value
-	 * @return The previous value stored at the cooridnate
+	 * @return The previous value stored at the coordinate
 	 */
 	public T update( final Coord2D coord, final Function<T, T> updatefunc ) {
 		return set( coord, updatefunc.apply( get( coord ) ) );
@@ -243,6 +243,20 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 		// include coordinates within the grid window that have the default value?
 		if( value.equals( defaultValue ) ) count += window.count( ) - map.size( );
 		
+		return count;
+	}
+
+	/**
+	 * Counts the number of coordinates that meet the condition specified in the
+	 * given function. The function will be evaluated for every coordinate in the
+	 * grid and the number of truthful evaluations is returned. 
+	 * 
+	 * @param condition The function that specifies the condition to evaluate
+	 * @return The number of coordinates that result in a evaluation of true 
+	 */
+	public long countIf( final Function<Coord2D, Boolean> condition ) {
+		long count = 0;
+		for( final Coord2D c : this ) if( condition.apply( c ) == true ) count++;
 		return count;
 	}
 
