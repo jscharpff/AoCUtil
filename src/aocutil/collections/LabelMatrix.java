@@ -11,7 +11,8 @@ import aocutil.object.LabeledObject;
  * Implementation of a matrix structure with String indexes
  * 
  * @author Joris
- * @param <T> The type of the data elements contained in the matrix
+ * @param <K> The type of the key elements
+ * @param <V> The type of the data elements contained in the matrix
  */
 public class LabelMatrix<K extends LabeledObject, V> {
 	/** The actual matrix data */

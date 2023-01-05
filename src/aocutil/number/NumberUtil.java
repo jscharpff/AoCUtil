@@ -72,6 +72,16 @@ public class NumberUtil {
 		return val;
 	}
 	
+	/**
+	 * Finds the positive modulus of integers a and b
+	 * 
+	 * @param a
+	 * @param b
+	 * @return The remainder of dividing a by b such that 0 <= a < b
+	 */
+	public static long mod( final long a, final long b ) {
+		return ((a % b) + b) % b;
+	}
 	
 	/**
 	 * Finds the lowest common multiplier of the specified integers
@@ -84,7 +94,7 @@ public class NumberUtil {
 		// special case
 		if( a == 0 && b == 0 ) return 0;
 		
-		return Math.abs( a * b ) / greatestCommonDivisor( a, b );
+		return Long.divideUnsigned( a * b, greatestCommonDivisor( a, b ) );
 	}
 	
 	/**
@@ -95,19 +105,37 @@ public class NumberUtil {
 	 * @return The greatest common integer divisor
 	 */
 	public static long greatestCommonDivisor( final long a, final long b ) {
-		return gcd( Math.min( a, b ), Math.max( a, b ) );
+		
+		return extendedEuclidean( Long.compareUnsigned( a, b ) < 0 ? a : b, Long.compareUnsigned( a, b ) < 0 ? b : a )[0];
 	}
 	
 	/**
-	 * Recursive function to determine greatest common divisor. This is an
-	 * implementation of the Euclidean algorithm
+	 * Extended version of the Euclidean algorithm that finds the greatest common
+	 * divisor of numbers a and b, while also returning the Bézout coefficients
 	 * 
-	 * @param a The largest of the two integers
-	 * @param b The smallest of the two integer
-	 * @return The greatest common divisor
+	 * @see https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+	 * 
+	 * @param a
+	 * @param b
+	 * @return An array of longs [gcd(a,b), s, t] such that gcd contains the
+	 *   greatest common divisor of a and b, while s and t are the Bézout
+	 *   coefficients such that a*s + b*t = 1 
 	 */
-	private static long gcd( final long a, final long b ) {
-		if( b == 0 ) return a;
-		return gcd( b, a % b );
+	public static long[] extendedEuclidean( final long a, final long b ) {
+		long old_r = a; long r = b;
+		long old_s = 1; long s = 0;
+		
+		while( r != 0 ) {
+			final long q = Long.divideUnsigned( old_r, r );
+			final long temp_r = r;
+			r = old_r - q * r;
+			old_r = temp_r;
+			final long temp_s = s;
+			s = old_s - q * s;
+			old_s = temp_s;
+		}
+		
+		final long t = b == 0 ? 0 : Long.divideUnsigned( old_r - old_s * a, b );
+		return new long[] { old_r, old_s, t };
 	}
 }

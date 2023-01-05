@@ -62,7 +62,7 @@ public class Coord2D implements Comparable<Coord2D> {
 	 * @param distance The distance to travel
 	 * @return The new position
 	 */
-	public Coord2D moveDir( final Direction dir, final int distance ) {
+	public Coord2D move( final Direction dir, final int distance ) {
 		return moveDir( dir.getRotation( ), distance );
 	}
 	

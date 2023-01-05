@@ -23,7 +23,7 @@ public class Cache<K, V> {
 	
 	/** Strategies to prune the cache */
 	public enum PruneStrategy {
-		LeastHits, Oldest;
+		LeastHits, LeastHitsRecently, Oldest;
 	}
 	
 	/** The configured prune strategy */
@@ -31,6 +31,17 @@ public class Cache<K, V> {
 	
 	/** The actual cache entries */
 	protected Map<K, CacheEntry> entries;
+	
+	/** True to enable logging of cache status messages */
+	protected boolean verbose;
+	
+	/**
+	 * Creates a new cache with default size of 1M entries, pruning factor 0.3
+	 * and pruning strategy 'oldest'
+	 */
+	public Cache( ) {
+		this( 1000000, 0.3, PruneStrategy.Oldest );
+	}
 	
 	/**
 	 * Creates a new cache with pruning strategy 'oldest'
@@ -55,6 +66,16 @@ public class Cache<K, V> {
 		this.maxsize = maxsize;
 		this.prunesize = (int)((double)maxsize * prunefactor);
 		this.pruning = pruneStrategy;
+		this.verbose = false;
+	}
+	
+	/**
+	 * Enables/disables the cache log messages
+	 * 
+	 * @param enable True to enable verbose mode, false to disable
+	 */
+	public void setVerbose( final boolean enable ) {
+		this.verbose = enable;
 	}
 	
 	/**
@@ -96,12 +117,13 @@ public class Cache<K, V> {
 	 * configured number of entries
 	 */
 	private void prune( ) {
-		System.out.println( "PRUNING" );
+		log( "Pruning cache" );
 		final List<CacheEntry> E = new ArrayList<>( entries.values( ) );
 		
 		// apply chosen pruning strategy
 		switch( pruning ) {
 			// sort entries from most to least cache hits
+			case LeastHitsRecently:
 			case LeastHits:
 				E.sort( (x,y) -> y.hits - x.hits );
 				break;
@@ -110,12 +132,27 @@ public class Cache<K, V> {
 			case Oldest:
 				E.sort( (x,y) -> Long.compare( y.lasthit, x.lasthit ) );
 				break;
+				
+			default: throw new RuntimeException( "Strategy not implemented: " + pruning );
 		}
 
 		// prune every entry after the specified pruning size
 		while( E.size( ) > prunesize ) {
 			entries.remove( E.remove( E.size( ) - 1 ).key );
-		}		
+		}
+		
+		// and reset hit count?
+		if( pruning == PruneStrategy.LeastHitsRecently ) entries.values( ).stream( ).forEach( v -> v.reset( ) );
+	}
+	
+	/**
+	 * Logs a message if the verbose flag is set
+	 * 
+	 * @param msg The message to log
+	 */
+	private void log( final String msg ) {
+		if( verbose )
+			System.err.println( "[" + System.currentTimeMillis( ) + "] " + msg );
 	}
 	
 	/**
@@ -151,6 +188,12 @@ public class Cache<K, V> {
 		protected void hit( ) {
 			hits++;
 			lasthit = System.currentTimeMillis( );
+		}
+		
+		/** Resets the cache hit statistics */
+		protected void reset( ) {
+			hits = 0;
+			lasthit = 0;
 		}
 		
 		/** @return The string description of the cache entry */

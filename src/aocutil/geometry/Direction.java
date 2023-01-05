@@ -13,6 +13,24 @@ public enum Direction {
 	}
 	
 	/**
+	 * Reconstructs the direction from a string value
+	 * 
+	 *  @param dir The direction name as string (east,left,etc.)
+	 *  @return The direction
+	 */
+	public static Direction fromString( final String dir ) {
+		
+		switch( dir.toLowerCase( ) ) {
+			case "north": case "up": return North;
+			case "east": case "right": return East;
+			case "south": case "down": return South;
+			case "west": case "left": return West;
+			
+			default:
+				throw new IllegalArgumentException( "Invalid direction name: " + dir );
+		}
+	}	
+	/**
 	 * Reconstructs the direction from its single-letter representation
 	 * 
 	 * @param dir The character of the direction (N,E,S,W) or (U,R,D,L)
