@@ -673,4 +673,32 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 			if( grid.hasValue( coord ) ) set( c, grid.get( coord ) ); 
 		}
 	}
+	
+	/**
+	 * Inserts a new, empty column at the specified index, moving all existing
+	 * keys after the column by one.
+	 * 
+	 * @param colidx The column index
+	 * @param colsize The width of the column to insert
+	 */
+	public void insertColumns( final int colidx, final int colsize ) {
+		final Set<Coord2D> tomove = new HashSet<>( getKeys( ) );
+		tomove.removeIf( c -> c.x < colidx );
+		
+		for( final Coord2D c : tomove ) set( c.move( colsize, 0 ), unset( c ) );
+	}
+	
+	/**
+	 * Inserts a new, empty row at the specified index, moving all existing
+	 * keys after the row by one.
+	 * 
+	 * @param rowidx The row index
+	 * @param rowsize The height of the row to insert
+	 */
+	public void insertRows( final int rowidx, final int rowsize ) {
+		final Set<Coord2D> tomove = new HashSet<>( getKeys( ) );
+		tomove.removeIf( c -> c.y < rowidx );
+		
+		for( final Coord2D c : tomove ) set( c.move( 0, rowsize ), unset( c ) );
+	}
 }
