@@ -138,4 +138,43 @@ public class NumberUtil {
 		final long t = b == 0 ? 0 : Long.divideUnsigned( old_r - old_s * a, b );
 		return new long[] { old_r, old_s, t };
 	}
+	
+	
+	/**
+	 * Performs the Guassian elimination process on a matrix of variables
+	 *
+	 * @param M The matrix of coefficients, augmented with their solve values.
+	 *   That is, the matrix M = CA where C is an NxM matrix consisting of N
+	 *   variable columns and M rows and A the M-sized vector of augmented
+	 *   solving variables
+	 * @return The matrix M' = C'A' that is the end result of Gaussian
+	 *   elimination
+	 */
+  public static double[][] gaussianElimination( final double[][] M ) { 	
+  	final int N = M[0].length;
+  	final int rows = M.length;
+  	
+  	// copy matrix into new result matrix
+  	final double[][] C = new double[rows][N];
+  	for( int i = 0; i < rows; i++ )
+  		for( int j = 0; j < N; j++ )
+  			C[i][j] = M[i][j];
+  	
+  	// reduce for all coefficient variables
+    for( int i = 0; i < rows; i++ ) {
+      // Select pivot and normalise the row by the pivot
+      final double pivot = C[i][i];
+      for( int j = 0; j < N; j++ ) C[i][j] = C[i][j] / pivot;
+      
+      // Sweep using row i
+      for( int k = 0; k < rows; k++ ) {
+        if( k == i ) continue;
+        final double factor = C[k][i];
+        for (int j = 0; j < N; j++) C[k][j] = C[k][j] - factor * C[i][j];
+      }
+    }
+    
+    // return result matrix
+    return C;
+  }
 }

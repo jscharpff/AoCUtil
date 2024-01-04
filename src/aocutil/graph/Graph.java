@@ -104,6 +104,24 @@ public class Graph {
 	}
 	
 	/**
+	 * Removes the edges from the graph
+	 * 
+	 * @param edge The edge to remove
+	 * @return True if the edge was removed, false otherwise
+	 */
+	public boolean removeEdge( final Edge edge ) {
+		if( !edges.contains( edge ) ) return false;
+		
+		// remove the edge
+		edges.remove( edge );
+		
+		// disconnect the nodes
+		edge.from.removeEdge( edge );
+		edge.to.removeEdge( edge );
+		return true;
+	}
+	
+	/**
 	 * Finds the root node of a directed graph
 	 * 
 	 * @return The root node of the tree, null if the graph is empty

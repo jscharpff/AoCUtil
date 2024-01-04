@@ -52,12 +52,26 @@ public class Node {
 	 * @return False if the edge was already known
 	 */
 	protected boolean addEdge( final Edge edge ) {
-		assert equals( edge.to ) || equals( edge.from) : "Node " + toString( ) + " is not the incoming node of arc " + edge.toString( );
+		assert equals( edge.to ) || equals( edge.from ) : "Node " + toString( ) + " is not part of edge " + edge.toString( );
 
 		// prevent duplicate arcs
 		if( edges.contains( edge ) ) return false;
 		
 		edges.add( edge );
+		return true;
+	}
+	
+	/**
+	 * Removes an edge from the node list
+	 * 
+	 * @param edge The edge to delete
+	 * @return True if the edge was removed, false otherwise
+	 */
+	protected boolean removeEdge( final Edge edge ) {
+		assert equals( edge.to ) || equals( edge.from ) : "Node " + toString( ) + " is not part of edge " + edge.toString( );
+
+		if( !edges.contains( edge ) ) return false;
+		edges.remove( edge );
 		return true;
 	}
 	
