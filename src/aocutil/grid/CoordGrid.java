@@ -1,5 +1,6 @@
 package aocutil.grid;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -295,6 +296,23 @@ public class CoordGrid<T> implements Iterable<Coord2D> {
 	 */
 	public boolean hasValue( final Coord2D coord ) {
 		return map.containsKey( coord );
+	}
+	
+	/**
+	 * Finds and returns the coordinates of all grid elements that match the
+	 * specified search value
+	 * 
+	 * @param value The value to find in the grid
+	 * @return Collection of coordinates that hold the given value in the grid,
+	 *   possibly empty if no such value exists in the grid
+	 */
+	public Collection<Coord2D> find( final T value ) {
+		final Collection<Coord2D> found = new ArrayList<>( );
+		for( final Entry<Coord2D, T> e : map.entrySet( ) ) {
+			if( e != null && e.getValue( ).equals( value ) )
+				found.add( e.getKey( ) );
+		}
+		return found;
 	}
 	
 	/**
